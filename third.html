@@ -1,0 +1,2169 @@
+<html>
+<head>
+   <title> P3 </title>   
+   <meta charset="utf-8" />
+   
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="lib/coordinates/Leaflet.Coordinates.css"/>
+  
+   <link rel="stylesheet" href="lib/leaflet.css" />
+   <link rel="stylesheet" href="lib/jquery-ui.css" />
+   
+		<!--  =======================  -->
+	<script src="lib/jquery.js"></script>
+   <script src="lib/jquery-ui.js"></script>
+   <script src="lib/leaflet.js"></script>
+
+   <script src="lib/coordinates/Leaflet.Coordinates.min.js"></script>
+   <script src="lib/Leaflet.Editable.js"></script>
+		<!--  ============ bootstrap ===========  -->
+   <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
+   <script src="lib/bootstrap/bootstrap.min.js"></script> 
+		<!--  =======================  -->
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css" />
+    
+    <link rel="stylesheet" href="lib/markercluster/screen.css" />
+	<link rel="stylesheet" href="lib/markercluster/MarkerCluster.css" />
+	<link rel="stylesheet" href="lib/markercluster/MarkerCluster.Default.css" />
+	<script src="lib/markercluster/leaflet.markercluster-src.js"></script>
+	
+	<!-- ==== Google Map Layer ===============- -->
+      <!--
+	   <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+      -->
+	<script src="lib/googlemap/Google.js"></script>
+        
+	<!-- x-editable (bootstrap) -->
+						<!-- bootstrap -->
+<!--
+        			<link href="lib/editable/css/bootstrap.css" rel="stylesheet">
+-->
+        			<link href="lib/editable/css/bootstrap-responsive.css" rel="stylesheet">  
+<!--
+        			<script src="lib/editable/bootstrap.js"></script>
+-->
+		  <script src="lib/editable/jquery.mockjax.js"></script>
+        <link href="lib/editable/css/bootstrap-editable.css" rel="stylesheet">
+        <script src="lib/editable/bootstrap-editable.js"></script>
+
+         <link rel="stylesheet" href="style/style.css" />
+
+   <style>
+		#box {			
+				display:block;
+		   }
+
+	   #box2 {			
+				display:block;
+		   }
+
+	#box3 {			
+				display:block;
+		   }
+
+		   #zones .input-sm{
+							width:80px !important ; 
+							font-weight:bold ;
+							
+							}		
+  </style>
+   <script type="text/javascript">
+			$(document).ready(function() {
+				  $.ajaxSetup({ cache: false });
+				});
+   </script>
+ 
+</head>
+<body onLoad="">
+   <div id="map"></div>
+   <div id="box"><b>S.P.U: </b>
+		<span class="poi-type"><img class="drag" type="maison" src="icons/maison.png" alt="POI: indus" /> </span>
+		<span class="poi-type"><img class="drag" type="maison" src="icons/maison2.png" alt="POI: indus" /> </span>
+		<span class="poi-type"><img class="drag" type="ecole" src="icons/ecole.png" alt="TREE: crise" /> </span>
+		<span class="poi-type"><img class="drag" type="hopital" src="icons/hopital.png" alt="POI: nat" /> </span>
+		<span class="poi-type"><img class="drag" type="hopital2" src="icons/hopital2.png" alt="POI: nat" /> </span>
+	</div>
+	<div id="box2"><b>U.L.P: </b>
+		<span class="poi-type"><img class="drag" type="conteneur" src="icons/conteneur.png" alt="POI: indus" ; style="width:60px;height:40px" /> </span>
+		<span class="poi-type"><img class="drag" type="hangar" src="icons/conteneur2.png" width="50px;"  alt="TREE: crise" style="width:60px;height:40px"/> </span>
+		<span class="poi-type"><img class="drag" type="hangar" src="icons/hangar.png" width="50px;"  alt="TREE: crise" style="width:60px;height:40px"/> </span>
+		<span class="poi-type"><img class="drag" type="hangar" src="icons/hangar2.png" width="50px;"  alt="TREE: crise" style="width:60px;height:40px"/> </span>
+	</div>
+	<div id="box3"><b>U.L.S.R: </b>
+		<span class="poi-type"><img class="drag" type="logistique" src="icons/logistique.png" alt="POI: indus" ; style="width:60px;height:40px" /> </span>
+
+	</div>
+   
+   <div id="circle_center" class="leaflet-control leaflet-bar" >
+	   <span class="poi-type"><img width="15" height="20" class="zone_center" type="marker" src="images/marker-icon.png" alt="POI: nat" /> </span>
+   </div>
+   
+<div class="modal fade" id="create_polygon_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ">
+  <div class="modal-dialog" style="width:250px;>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Zone d'impact previsionnelle</h4>
+      </div>
+      <div class="modal-body">
+			<div class="form-group">
+			  <label for="proba">Puissance:</label>
+			  <input  class="form-control puissance" id="puissance">
+			</div>
+			<div class="form-group">
+			  <label for="proba">Probabilite:</label>
+			  <input class="form-control proba" id="proba">
+			</div>
+			<div class="form-group">
+			  <label for="dde">Dernier evenement:</label>
+			  <input class="form-control dde" id="dde">
+			</div>
+			<div class="form-group">
+			  <label for="coords">Coordonées:</label>
+			  <textarea class="form-control coords" rows="5" cols="5" id="coords"></textarea>
+			</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="createPolygone">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade"  id="save_polygon_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Zone d'impact previsionnelle</h4>
+      </div>
+      <div class="modal-body">
+			<div class="form-group">
+			  <label for="proba">Puissance:</label>
+			  <input  class="form-control puissance" id="puissance">
+			</div>
+			<div class="form-group">
+			  <label for="proba">Probabilite:</label>
+			  <input class="form-control proba" id="proba">
+			</div>
+			<div class="form-group">
+			  <label for="dde">Dernier evenement:</label>
+			  <input class="form-control dde" id="dde">
+			</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="save_polygon">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- __________ config panel ______________________-->
+
+<div class="modal fade"  id="config_panel_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"> Configuration </h4>
+      </div>
+      <div class="modal-body">
+			<ul class="nav nav-tabs nav-justified">
+			  <li class="active"><a data-toggle="tab" href="#tc">Type de crise</a></li>
+			  <li><a data-toggle="tab" href="#tp">Type de propagation</a></li>
+			  <li><a data-toggle="tab" href="#up">Unite de propagation</a></li>
+			</ul>
+
+			<div class="tab-content">
+				  <div id="tc" class="tab-pane fade in active">
+					     <br/>
+						<ul class="list-group" style="width:" >
+						</ul>
+						<button  id="add_tc" style="float:center" type="button" class="btn btn-primary" id="save_type_cata" >
+							<span class="glyphicon glyphicon-plus"> </span></button>
+				  </div>
+				  <div id="tp" class="tab-pane fade">
+					
+				  </div>
+				  <div id="up" class="tab-pane fade">
+					
+				  </div>
+		  </div>
+      </div>
+      <div class="modal-footer">
+        <button  style="float:right" type="button" class="btn btn-primary" data-dismiss="moda" id="save_type_cata" >
+			<span class="glyphicon glyphicon-ok"> </span> Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <script type="text/javascript">
+	 $(function(){
+		   
+		  $.getJSON("data/config/type_catastrophe.json", function(data){
+		
+	                for(i=0;i<data.features.length;i++){
+						 console.log(data.features[i].value);
+						 			$("#tc ul").append('<li class="list-group-item"><a href="#" class="nom_tc" data-type="text" data-pk="1" class="editable editable-click" >'+data.features[i].value+'</a> <span class="glyphicon glyphicon-trash delete_tc" style="float:right; color:red; cursor:pointer;" aria-hidden="true"></span></li>');
+
+						}
+						
+				$('.nom_tc').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'nom',
+				   title: ''
+				 });
+			
+			var remove_tc=$(".delete_tc");
+			        remove_tc.on("click",function(){
+						$(this).closest("li").remove() ;
+						})
+						
+			
+			}); //end geojson
+				 
+			
+		  
+		  $("#add_tc").on("click",function(){
+			   
+			    var tc=$('<li class="list-group-item"><a href="#" class="nom_tc" data-type="text" data-pk="1" class="editable editable-click" >  </a> <span class="glyphicon glyphicon-trash delete_tc" style="float:right; color:red; cursor:pointer;" aria-hidden="true"></span></li>');
+			      //~ remove btn 
+			    var remove_tc=tc.find(".delete_tc");
+			        remove_tc.on("click",function(){
+						$(this).closest("li").remove() ;
+						})
+						
+			     $("#tc ul").append(tc);
+			    
+			     $('.nom_tc').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'nom',
+				   title: ''
+				 });
+			     
+			  })	
+			  		 
+		  $("#save_type_cata").on("click",function(){
+			  
+			   var type_catas=[];
+			  
+			   $("#tc li").each(function(index, value) { 
+                          
+                          var feature = {"value":$(this).text(),"text":$(this).text() }
+                          
+                          type_catas.push(feature);
+                       });
+                       
+               var FeatureCollection ={ "type":"FeatureCollection",
+										"features":type_catas
+										}
+				
+			    
+			     console.log(JSON.stringify(FeatureCollection)) ;
+			     $.ajax({ 
+						 url :"actions/config/save_type_catastrophe.php",
+						 cache: false,
+						 type: "POST",
+						 dataType :'text',
+						 contentType:"application/json; charset=utf-8",
+						 data: JSON.stringify(FeatureCollection),
+						  
+						 success: function(data)
+						 {
+									alert(data) ;
+									
+						   },
+						  error: function (jqXHR, textStatus, errorThrown)
+							{
+								alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+							}
+						  }); //end ajax  
+			  })// end save			 
+		  });
+ </script>
+<!-- /config panel -->
+ <script src="lib/editable/editable_config.js"></script>
+ <script type="text/javascript" >
+ 
+  			$.fn.editable.defaults.mode =  'inline';
+ </script>
+
+<script>
+	// ===================	Drag & Drop
+$(document).ready(function() { 
+	  
+				
+			var markers = [];
+			var poiIcon = L.Icon.extend({
+		    options: {
+		        iconSize: [52,42],
+		        iconAnchor: [-20,0],
+		        shadowSize: [22,13],
+		        shadowAnchor: [-31,-19],
+		        popupAnchor: [32,-2]
+		             }
+		       });
+
+		var maisonIcon = new poiIcon({iconUrl:'icons/maison2.png'});
+		var hopitalIcon   = new poiIcon({iconUrl:'icons/hopital2.png'});
+		var ecoleIcon  = new poiIcon({iconUrl:'icons/ecole.png'});
+
+		var conteneurIcon = new poiIcon({iconUrl:'icons/conteneur2.png'});
+
+		var hangarIcon   = new poiIcon({iconUrl:'icons/hangar2.png'});
+        var logistiqueIcon   = new poiIcon({iconUrl:'icons/logistique.png'});
+
+		   // on drag point box1 
+	
+			$(".drag").draggable({
+				helper: 'clone',
+				containment: 'map',
+				start: function(evt, ui) {
+					$('#box').fadeTo('fast', 0.6, function() {});
+				},
+				stop: function(evt, ui) {
+					$('#box').fadeTo('fast', 1.0, function() {});
+					
+					var options = {
+						//~ id: 2,
+						type: ui.helper.attr('type'),
+						icon: eval(ui.helper.attr('type') + 'Icon'),
+						draggable: true
+					};
+					
+				insertPoint( map.containerPointToLatLng([ui.offset.left, ui.offset.top]),options );
+				
+				}
+			});	
+	
+				// on drag point box2
+	
+			$(".drag2").draggable({
+				helper: 'clone',
+				containment: 'map',
+				start: function(evt, ui) {
+					$('#box2').fadeTo('fast', 0.6, function() {});
+				},
+				stop: function(evt, ui) {
+					$('#box2').fadeTo('fast', 1.0, function() {});
+					
+					var options = {
+						//~ id: 2,
+						type: ui.helper.attr('type'),
+						icon: eval(ui.helper.attr('type') + 'Icon'),
+						draggable: true
+					};
+					
+				insertPoint( map.containerPointToLatLng([ui.offset.left, ui.offset.top]),options );
+				
+				}
+			});	
+
+				// on drag point box3
+	
+			$(".drag3").draggable({
+				helper: 'clone',
+				containment: 'map',
+				start: function(evt, ui) {
+					$('#box3').fadeTo('fast', 0.6, function() {});
+				},
+				stop: function(evt, ui) {
+					$('#box3').fadeTo('fast', 1.0, function() {});
+					
+					var options = {
+						//~ id: 2,
+						type: ui.helper.attr('type'),
+						icon: eval(ui.helper.attr('type') + 'Icon'),
+						draggable: true
+					};
+					
+				insertPoint( map.containerPointToLatLng([ui.offset.left, ui.offset.top]),options );
+				
+				}
+			});	
+
+			}) ;	// end  Drag&drop	
+			
+	// INSERT point
+	function insertPoint(position,options) { 
+		
+		    var Als;
+	    
+		
+		    var point_id = Math.random().toString(36).substr(2, 9);
+		    
+			var point = L.marker(position,options).addTo(map);
+			
+			var point_lat=point.getLatLng().lat;
+			var point_lng=point.getLatLng().lng;
+
+            var popup=$(
+            '<div id="pl_editable">'
+				+'<div class="form-group">'
+					+'<label for="pwd">Coordonnées:</label>'
+					+'<input type="text" class="form-control" id="pl_coordinates" value='+point_lng+','+point_lat+'>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Nature:</label>'
+					+'<a href="#" class="nature" data-type="select" data-pk="1" data-value="'+options.type+'"  class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Utilisation:</label>'
+					+'<a href="#" class="utilisation" data-type="select" data-pk="1" data-value=""  class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Etat:</label>'
+					+'<a href="#" class="etat" data-type="select" data-pk="1" data-value=""  class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Capacite d\'accueil:</label>'
+					+'<a href="#" class="capacite" data-type="text" data-pk="1" class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Accebilité:</label>'
+					+'<a href="#" class="accessibilite" data-type="select" data-pk="1" data-value=""  class="editable editable-click" > </a>'
+				+'</div>'
+				+"<span class=popup_title >Ressources</span><br/>"
+				+'<div class="form-group">'
+					+'<label for="pwd">Energie:</label>'
+					+'<a href="#" class="energie" data-type="text" data-pk="1" class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Eau:</label>'
+					+'<a href="#" class="eau" data-type="text" data-pk="1" class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Nourriture:</label>'
+					+'<a href="#" class="nourriture" data-type="text" data-pk="1" class="editable editable-click" > </a>'
+				+'</div>'
+                     +'<button id="save_pl" class="btn btn-primary" style="margin-left:170px;"><span class="glyphicon glyphicon-ok"> Enregistrer</span></button>'
+            +'</div>');
+            
+            
+            point.bindPopup(popup.get(0),{'minWidth':'300'}) ;
+            //~ ------------ enable edition on fields -------------------------
+            popup.find('.capacite').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'acceuil',
+				   title: ''
+				 });
+				 
+				
+				 
+			popup.find('.utilisation').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "Abri", text: 'Abri'},
+					{value: "Entrepot", text: 'Entrepot'},
+					{value: "Stockage", text: 'Stockage'},
+					{value: "Autre", text: 'Autre'},
+				   ] 
+				  });  // end .utilisation	
+				   
+			popup.find('.accessibilite').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "Normale", text: ' Normale'},
+					{value: "Reduite", text: 'Reduite'},
+					{value: "T. Reduite", text: 'T. Reduite'},
+					{value: "Dangereuse", text: ' Dangereuse'},
+					{value: "T. Dangereuse", text: 'T. Dangereuse'},
+					{value: "Inaccessible", text: 'Inaccessible'}
+				]  
+				  });  // end .accessibilite	
+				  
+				  
+				$.getJSON("data/config/type_catastrophe.json", function(data){	
+	              Als= data.features;
+	              console.log(Als);
+	              
+	              //~ Als=[{"value":"Ismael","text":"Ismael"},{"value":"Alseny","text":"Alseny"}]
+	              
+	              popup.find('.etat').editable({
+				  prepend: "choisissez",
+				  source:[{value: "TME", text: ' TME'},
+					{value: "ME", text: ' ME'},
+					{value: "BE", text: ' BE'},
+					{value: "TBE", text: ' TBE'},]
+				  });  // end .etat	
+				  
+				  
+			     });   
+				  
+			
+				   
+			popup.find('.nature').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "ecole", text: ' ecole'},
+					{value: "hopital", text: 'hopital'},
+					{value: "maison", text: ' maison'},
+					{value: "parking", text: ' parking'},
+					{value: "conteneur", text: ' conteneur'},
+					{value: "hangar", text: ' hangar'},
+					{value: "logistique", text: ' logistique'},
+				   
+				]  
+				  });  // end .nature	 
+			
+			popup.find('.energie').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'energie',
+				   title: ''
+				 });
+				 	 
+			popup.find('.eau').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'eau',
+				   title: ''
+				 });
+				 	 
+			popup.find('.nourriture').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'nourriture',
+				   title: ''
+				 });	 
+			 
+           
+			point.on('dragend', function(evt){
+				updatePoint(point);
+			});
+				
+	//=================== click on save_pl (pl="point logistique") ====================
+ 
+	popup.find("#save_pl").on("click",function () {
+		    
+		    var point_id = Math.random().toString(36).substr(2, 9);
+		    
+		    var point_coordinates=popup.find("#pl_coordinates").val() ;	 				
+            var coords= JSON.parse("["+point_coordinates+"]") ;
+		    
+		    
+		    
+			var nature =popup.find(".nature").text() ;
+			var utilisation =popup.find(".utilisation").text() ;
+			var etat =popup.find(".etat").text() ;
+			var capacite =popup.find(".capacite").text() ;
+			var accessibilite =popup.find(".accessibilite").text() ;
+			
+			var energie =popup.find(".energie").text() ;
+			var eau =popup.find(".eau").text() ;
+			var nourriture =popup.find(".nourriture").text() ;
+						
+            
+		    var feature = {
+						"id":point_id,
+						"coordinates":coords,
+						"nature":nature,
+						"utilisation":utilisation,
+						"etat":etat,
+						"capacite": capacite,
+						"accessibilite": accessibilite,
+						"energie": energie,
+						"eau": eau,
+						"nourriture": nourriture									
+					  }
+		  		  		    
+		  	console.log(feature) ;	  		    
+		  		  		         
+		          
+	$.getJSON("data/points_logistique.json", function(data){
+			var points = data ;	
+			points.features.push(feature) ;
+	               
+		   console.log(points) ;
+		   
+	    $.ajax({ 
+             url :"actions/save_point_logistique.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(points),
+			  
+			 success: function(data)
+			 {
+						alert(data) ;
+						
+			   },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+              }); //end ajax  
+	               
+			}); // end getJson pl 
+	
+					
+           
+		 
+		});   //en click on save_center  		
+			
+			 
+ } // end insertPoint
+			 
+// UPDATE point
+	function updatePoint(point) { 
+						var point_lat=point.getLatLng().lat;
+						var point_lng=point.getLatLng().lng;
+						 
+						 //~ console.log(center_id); 
+						 //~ console.log(center_lat); 
+						 //~ console.log(center_lng); 
+						 
+						 var p = $(point.getPopup().getContent()); 
+						 
+						 
+						 //~ console.log(c); 
+						 
+						 p.find("#pl_coordinates").val(point_lng+','+point_lat); 
+						 
+						  console.log(p.find("#pl_coordinates").val());   
+								}
+		
+</script>
+
+
+<script language="javascript">
+      
+          var zones_impact ;	
+          
+          $.getJSON("data/zones_impact_prev.json", function(data){
+		
+	                zones_impact = data ;
+			});
+	
+  //~========================= map definition ========================================
+		 var center = new L.LatLng(34.987877, -5.009833);
+		  
+		   //~ var lg = new L.LayerGroup() ;
+		  
+      	 var map = new L.Map('map', { 
+				center: center, 
+				zoom: 8, 
+				attributionControl:true, 
+				zoomControl:true, 
+				detectRetina:true,
+				editable: true ,
+				maxZoom:18				
+          });    
+
+      	var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://fstt.ac.ma">OpenStreetMap</a>',
+            maxZoom: 15
+         });
+         
+         var grayscale = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+		{maxZoom: 20, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'});
+
+         osm.addTo(map);
+         
+         //~ var googleLayer = new L.Google('HYBRID');
+         //~ 
+        //~ var baseMaps = {
+							//~ "OpenStreetMap": osm,
+							//~ "Google Maps": googleLayer ,	
+						 //~ }; 
+             //~ 
+	   //~ var LC =L.control.layers(baseMaps,{} ).addTo(map);
+          //~ 
+ 
+
+    //~ ==============================================
+      
+         function getColor(rayon) {
+						return rayon == "1" ? '#E30800' :
+						 rayon == "2" ? '#F28900' :
+						 rayon == "3"  ? '#E1F200' :
+						 rayon ==  "4" ? '#91F200' :
+						 rayon == "5" ? '#FD8D3C' :
+						 rayon == "6" ? '#ADB' :
+						 rayon == "7" ? '#013' :
+						'#DAF27C'; 
+					}
+		
+ //~ ----------------------------------------------------- 
+		function style(feature) {
+				return {
+					fillColor:getColor(feature.properties.rayon),
+					weight: 1,
+					opacity: 1,
+					color: '#000',
+					dashArray: '2',
+					fillOpacity:0.3
+				};
+			}
+ 
+			
+ //~ ========================== Add legend control =================================
+	
+	var legend = L.control({position: 'bottomright'});
+
+	legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [1, 2, 3, 4],
+        labels = [];
+        
+       div.innerHTML = '<h5>Degré de gravité</h5>'; 
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML += ' '
+        +'<i style="background:' + getColor(grades[i]) + '"></i> ' + grades[i]+'<br>';
+    }
+
+		return div;
+	};
+
+	 //legend.addTo(map);
+	
+
+  //~ ----------------------------------
+    
+       var info = L.control();
+
+		info.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+		
+	 info.update = function (props) {
+		this._div.innerHTML = '<h4> </h4>' +  (props ?
+			'<b>Puissance: ' + props.puissance 
+			+'</b><br /><b>Dernier evenement : </b>' + props.dde 
+			+'<br/><b>D° Probabilité:</b>' + props.proba+'<br/>': '<b>     </b> ');
+       };
+       
+	 info.dispaly_panel_informations = function (props) {
+		    this._div.innerHTML ='<h4> </h4>' +  (props ?
+			'<b>Rayon(m): </b>' + props.rayon + '<br /><b>Intensité: <b/>' + props.intensite 
+			+'<br /> <b>D° Probabilité : </b>' + props.probabilite 
+			+'<br/>': '<b>     </b> ');
+       };
+
+	 info.addTo(map);
+	
+  //~------------------------------------
+      
+	function highlightFeature(e) {
+			
+					var layer = e.target;
+
+					layer.setStyle({
+					  
+						weight: 2,
+						opacity: 1,
+						color: 'green',
+						dashArray: '4',
+						fillOpacity: 0.7
+					});
+
+					if (!L.Browser.ie && !L.Browser.opera) {
+						//~ layer.bringToFront();
+					}
+					//~ console.log(layer.feature.properties);
+					info.update(layer.feature.properties);
+				}
+      //~----------------------------------
+	function highlightFeature2(e) {
+			
+					var layer = e;
+						
+					console.log(layer) ;
+					
+					//~ console.log(layer.feature.properties);
+					info.update(e.properties);
+				}
+      //~----------------------------------
+      
+	   function resetHighlight(e) {
+			geojson1.resetStyle(e.target);
+			
+			info.update();
+		}
+		
+		//~------------------------------------
+			function zoomToFeature(e) {
+						map.fitBounds(e.target.getBounds());						
+				}
+		//~ -----------------------------------
+		
+	
+//~ ================ Loads logistic points  =========================================================	
+
+$(function(){
+	
+		
+ var markers = new L.markerClusterGroup();
+		
+		var poiIcon = L.Icon.extend({
+		    options: {
+		        iconSize: [22,32],
+		        //~ iconAnchor: [-20,0],
+		        //~ shadowSize: [22,13],
+		        //~ shadowAnchor: [-31,-19],
+		        //~ popupAnchor: [32,-2]
+		    }
+		});
+
+	//~  Create Icons 
+		var maisonIcon = new poiIcon({iconUrl:'icons/maison.png',iconSize: [52,42]});
+		var ecoleIcon = new poiIcon({iconUrl:'icons/ecole.png',iconSize: [52,42]});
+		var hopitalIcon = new poiIcon({iconUrl:'icons/hopital.png',iconSize: [52,42]});
+
+		var conteneurIcon = new poiIcon({iconUrl:'icons/conteneur.png',iconSize: [52,42]});
+		var hangarIcon = new poiIcon({iconUrl:'icons/hangar.png',iconSize: [52,42]});
+		var logistiqueIcon = new poiIcon({iconUrl:'icons/logistique.png',iconSize: [52,42]});
+		
+
+		
+		var centerIcon = new poiIcon({iconUrl:'icons/marker-icon.png',iconSize: [32,22]});
+		
+		
+		// load points
+	function loadPoints() {
+		    
+			var maisonIcon = new poiIcon({iconUrl:'icons/maison.png',iconSize: [52,42]});
+			var ecoleIcon = new poiIcon({iconUrl:'icons/ecole.png',iconSize: [52,42]});
+			var hopitalIcon = new poiIcon({iconUrl:'icons/hopital.png',iconSize: [52,42]});
+
+		var conteneurIcon = new poiIcon({iconUrl:'icons/conteneur.png',iconSize: [52,42]});
+		var hangarIcon = new poiIcon({iconUrl:'icons/hangar.png',iconSize: [52,42]});
+
+			$.get("data/points_logistique.json", function(poitns_logistiques){
+				// Add points 
+				
+				for(i=0; i< poitns_logistiques.features.length;i++) {
+		  
+					var ftr = poitns_logistiques.features[i];
+						
+					
+					var options = {
+										type: ftr.nature,
+										icon: eval(ftr.nature + 'Icon'),
+										draggable: true
+									};
+					
+			var point = L.marker([ftr.coordinates[1],ftr.coordinates[0]],options).addTo(map);
+			
+			var point_lat=point.getLatLng().lat;
+			var point_lng=point.getLatLng().lng;
+			var point_id = ftr.id ;
+			
+			
+		var popup=$(
+            '<div class="pl_editable">'
+				+'<input class="point_id" type="hidden" value="'+point_id+'" />'
+				+'<div class="form-group">'
+					+'<label for="pwd">Coordonnées:</label>'
+					+'<input type="text" class="pl_coordinates form-control"  value="'+point_lng+','+point_lat+'">'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Nature:</label>'
+					+'<a href="#" class="nature" data-type="select" data-pk="1" data-value="'+options.type+'"  class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Utilisation:</label>'
+					+'<a href="#" class="utilisation" data-type="select" data-pk="1" data-value="'+ftr.utilisation+'"  class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Etat:</label>'
+					+'<a href="#" class="etat" data-type="select" data-pk="1" data-value="'+ftr.etat+'"  class="editable editable-click" > </a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Capacite d\'accueil:</label>'
+					+'<a href="#" class="capacite" data-type="text" data-pk="1" class="editable editable-click" >'+ftr.capacite+'</a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Accebilité:</label>'
+					+'<a href="#" class="accessibilite" data-type="select" data-pk="1" data-value="'+ftr.accessibilite+'"  class="editable editable-click" > </a>'
+				+'</div>'
+				+"<span class=popup_title >Ressources</span><br/>"
+				+'<div class="form-group">'
+					+'<label for="pwd">Energie:</label>'
+					+'<a href="#" class="energie" data-type="text" data-pk="1" class="editable editable-click" >'+ftr.energie+'</a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Eau:</label>'
+					+'<a href="#" class="eau" data-type="text" data-pk="1" class="editable editable-click" >'+ftr.eau+'</a>'
+				+'</div>'
+				+'<div class="form-group">'
+					+'<label for="pwd">Nourriture:</label>'
+					+'<a href="#" class="nourriture" data-type="text" data-pk="1" class="editable editable-click" >'+ftr.nourriture+'</a>'
+				+'</div>'
+                     +'<button class="delete_pl btn btn-danger" style="float:left;"><span class="glyphicon glyphicon-trash"> Supprimer</span></button>'
+                     +'<button class="update_pl btn btn-primary" style="margin-left:180px;"><span class="glyphicon glyphicon-ok"> Enregistrer</span></button>'
+            +'</div>');
+				
+							
+	
+	       point.bindPopup(popup.get(0),{'minWidth':'300'}) ;
+	       
+	       
+            //~ ------------ enable edition on fields -------------------------
+            popup.find('.capacite').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'acceuil',
+				   title: ''
+				 });
+				 
+			popup.find('.utilisation').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "Abri", text: 'Abri'},
+					{value: "Entrepot", text: 'Entrepot'},
+					{value: "Stockage", text: 'Stockage'},
+					{value: "Autre", text: 'Autre'},
+				   
+				   ] 
+				  });  // end .utilisation	
+				   
+			popup.find('.etat').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "TME", text: ' TME'},
+					{value: "ME", text: ' ME'},
+					{value: "BE", text: ' BE'},
+					{value: "TBE", text: ' TBE'},
+				]  
+				  });  // end .etat	
+				   
+			popup.find('.accessibilite').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "Normale", text: ' Normale'},
+					{value: "Reduite", text: 'Reduite'},
+					{value: "T. Reduite", text: 'T. Reduite'},
+					{value: "Dangereuse", text: ' Dangereuse'},
+					{value: "T. Dangereuse", text: 'T. Dangereuse'},
+					{value: "Inaccessible", text: 'Inaccessible'}
+				   
+				]  
+				  });  // end .accessibilite		   
+				   
+			popup.find('.nature').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "ecole", text: ' ecole'},
+					{value: "hopital", text: 'hopital'},
+					{value: "maison", text: ' maison'},
+					{value: "parking", text: ' parking'},
+					{value: "conteneur", text: ' conteneur'},
+					{value: "hangar", text: ' hangar'},
+					{value: "logistique", text: ' logistique'},
+				   
+				]  
+				  });  // end .nature	 
+			
+			popup.find('.energie').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'energie',
+				   title: ''
+				 });
+				 	 
+			popup.find('.eau').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'eau',
+				   title: ''
+				 });
+				 	 
+			popup.find('.nourriture').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'nourriture',
+				   title: ''
+				 });	 
+			 
+
+					point.on('dragend', function(evt){
+						updatePoint(point);
+					});
+			
+					markers.addLayer(point);
+					
+					
+		var update_btn=popup.find(".update_pl") ;
+		var delete_btn=popup.find(".delete_pl") ;
+		
+	   update_btn.on("click",function(){ 
+			
+			var point_coordinates = $(this).closest(".pl_editable").find(".pl_coordinates").val();
+							
+            var coords= JSON.parse("["+point_coordinates+"]") ;
+			
+			var point_id = $(this).closest(".pl_editable").find(".point_id").val();
+			var nature =$(this).closest(".pl_editable").find(".nature").text() ;
+			var utilisation =$(this).closest(".pl_editable").find(".utilisation").text() ;
+			var capacite =$(this).closest(".pl_editable").find(".capacite").text() ;
+			var accessibilite =$(this).closest(".pl_editable").find(".accessibilite").text() ;
+			var etat =$(this).closest(".pl_editable").find(".etat").text() ;
+			
+			var energie =$(this).closest(".pl_editable").find(".energie").text() ;
+			var eau =$(this).closest(".pl_editable").find(".eau").text() ;
+			var nourriture =$(this).closest(".pl_editable").find(".nourriture").text() ;
+						
+           
+            
+		    var mm_point = {
+						"id":point_id,
+						"coordinates":coords,
+						"nature":nature,
+						"utilisation":utilisation,
+						"etat":etat,
+						"capacite": capacite,
+						"accessibilite": accessibilite,
+						"energie": energie,
+						"eau": eau,
+						"nourriture": nourriture
+					  }
+		  		  		    		  			         
+		          
+	$.getJSON("data/points_logistique.json", function(data){
+			
+			var points = data ;	
+		
+		    console.log(points) ;
+		
+			for(i=0;i<points.features.length;i++){
+						
+						  if(points.features[i].id==point_id){
+							    points.features.splice(i,1); 
+							  }
+						}
+			points.features.push(mm_point) ;
+	               
+			console.log(points) ;
+		  
+	    $.ajax({ 
+             url :"actions/save_point_logistique.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(points),
+			  
+			 success: function(rs)
+			 {
+						alert(rs) ;
+						
+			   },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+              }); //end ajax  
+	               
+			}); // end getJson update_pl 
+	 		    
+		  		  		         
+				 }) ; // end on click
+				 
+	  delete_btn.on("click",function(){ 
+			
+			var point_id = $(this).closest(".pl_editable").find(".point_id").val();
+			
+	$.getJSON("data/points_logistique.json", function(data){
+			
+			var points = data ;	
+		
+			for(i=0;i<points.features.length;i++){
+						
+						  if(points.features[i].id==point_id){
+							    points.features.splice(i,1); 
+							  }
+						}
+			
+		  
+	    $.ajax({ 
+             url :"actions/save_point_logistique.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(points),
+			  
+			 success: function(rs)
+			 {
+						alert(rs) ;
+						
+			   },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+              }); //end ajax  
+	               
+			}); // end getJson update_pl 
+	 		    
+		  		  		         
+				 }) ; // end on click
+					
+				} // end for
+		
+		map.addLayer(markers);
+	//~ map.fitBounds(markers.getBounds());
+	
+	  
+	
+	 }); // end ajax 
+		} // end function loadPoints
+
+				 loadPoints() ;
+				 
+				 
+	
+				 
+	}); // end Jquery
+	
+	//~------------------- get Mouse poosition ----- 
+		
+		/* L.control.coordinates({
+			position:"bottomleft",
+			decimals:2,
+			decimalSeperator:".",
+			labelTemplateLat:"Latitude: {y}",
+			labelTemplateLng:"Longitude: {x}"
+		}).addTo(map); */
+		
+		
+   </script>
+   <script language="javascript" >
+	  
+	  //~ ---------------- drawer style  --------------------------
+	    map.on('editable:editing', function (e) {
+					e.layer.setStyle({
+						               color: 'Red',
+						               weight: 1,
+									   opacity: 0.8,
+									   //~ color: 'green',
+									   dashArray: '4'
+						               });
+         });
+	   
+	    L.NewPolygonControl = L.Control.extend({
+
+        options: {
+            position: 'topleft'
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+                link = L.DomUtil.create('a', '', container);
+
+            link.href = '#';
+            link.title = 'Create a new polygon';
+            link.innerHTML = '▱';
+            L.DomEvent.on(link, 'click', L.DomEvent.stop)
+                      .on(link, 'click', function () {
+                        map.editTools.startPolygon();
+                      });
+
+            return container;
+        }
+    });
+    
+    //~ ------------------------------ create polygon --------------------------------------------
+  
+    L.CreatePolygonControl = L.Control.extend({
+
+        options: {
+            position: 'topleft'
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+                link = L.DomUtil.create('a', '', container);
+
+
+            link.href = '#';
+            link.title = 'Ajouter';
+            link.innerHTML = '<i class="fa-plus-square fa fa-lg"  style="outline: none;"></i>';
+            L.DomEvent.on(link, 'click', function () {
+                         
+                         $('#create_polygon_modal').modal();
+                                                 
+                         
+                         
+                      });
+                      
+                      
+                      
+            container.style.display = 'non';
+            map.editTools.on('editable:enabled', function (e) {
+                container.style.display = 'block';
+            });
+            map.editTools.on('editable:disable', function (e) {
+                container.style.display = 'none';
+            });
+            
+            return container;
+        }
+    });
+    
+ //~ ------------------------------ Save polygon --------------------------------------------
+    L.SavePolygonControl = L.Control.extend({
+
+        options: {
+            position: 'topleft'
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+                link = L.DomUtil.create('a', '', container);
+            
+            
+            
+            link.href = '#';
+            link.title = 'Enregistrer';
+            link.innerHTML = '<i class="fa-save fa fa-lg"  style="outline: none;"></i>';
+            L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', function () {
+                         $('#save_polygon_modal').modal();
+                        }); 
+                      
+                      
+                      
+            container.style.display = 'non';
+            map.editTools.on('editable:enabled', function (e) {
+                container.style.display = 'block';
+            });
+            map.editTools.on('editable:disable', function (e) {
+                container.style.display = 'none';
+            });
+            
+            return container;
+           }
+    }); 
+
+  //~ ------------------------ end click on save "drawed polygon  --------------------
+  
+ //~ ------------------------------ config Panel --------------------------------------------
+    L.ConfigControl = L.Control.extend({
+
+        options: {
+            position: 'topleft'
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar config_icon'),
+                link = L.DomUtil.create('a', '', container);
+            
+            
+            
+            link.href = '#';
+            link.title = 'Configuration';
+            link.innerHTML = '<i class="fa-cog fa fa-lg"  style="outline: none;"></i>';
+            L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', function () {
+                         $('#config_panel_modal').modal();
+                        }); 
+                      
+                      
+                      
+            container.style.display = 'non';
+            map.editTools.on('editable:enabled', function (e) {
+                container.style.display = 'block';
+            });
+            map.editTools.on('editable:disable', function (e) {
+                container.style.display = 'none';
+            });
+            
+            return container;
+           }
+    }); 
+
+  //~ ------------------------ end click on save "drawed polygon  --------------------
+  
+     map.addControl(new L.ConfigControl());
+     map.addControl(new L.NewPolygonControl());
+     map.addControl(new L.CreatePolygonControl());
+     map.addControl(new L.SavePolygonControl());
+    
+   </script>
+   
+   
+   <script>
+	   
+	//~=========================  click to create polygon =========================== 
+	$(function(){
+		 
+		//~ check id string can be parsed in json
+		function IsJsonString(str) {
+			try {
+					JSON.parse(str);
+				} catch (e) {
+								return false;
+						  }
+			return true;
+		} 
+		 
+		$('#coords').val('');
+		$('#createPolygone').prop('disabled', true);
+		
+	//~ check changes on coordinates textarea 
+		
+			 $("#coords").bind("input", function(event, ui) {   
+										 var test1=false ;
+										 var test2=false ;
+										 
+									$('#createPolygone').prop('disabled', true);     
+										 
+										 console.log("change")
+													   
+										var coords_string = $("#coords").val();
+											 
+										var tab1=coords_string.split(" ");
+								  
+										var last_indice=tab1.length-1 ;
+								  
+										if(tab1[0]!=tab1[last_indice]){ console.log("notClosed")
+											} else  { console.log("Closed") ; test1=true ; }
+										
+							 var coordsList ='[[' ;
+							 
+							 for(var i=0;i< (tab1.length-1) ;i++){
+								  
+								  point = tab1[i] ;
+								  
+								  latlng=point.split(",") ;
+								  
+								  coordsList+="[" + latlng[0]+","+latlng[1]+"]," ;
+								  
+								 }
+								 
+
+						coordsList+="[" + tab1[0]+","+tab1[1]+"]" ;
+													
+								coordsList+=']]' ;
+							
+										 
+									 if (IsJsonString(coordsList) ) {
+										  console.log("isJson");
+										  test2=true ;
+										  } else { console.log("notJson"); }
+										  
+							if(test1 && test2) {
+										 $('#createPolygone').prop('disabled', false);
+									}else { 
+											console.log(test1) ;
+											console.log(test2) ;
+											 console.log("coordinates not correct ! ") ;
+											  }
+              
+             }); // end check coordinate
+		
+		
+		//~---------------------   create coordinates of polygon -------------------------- 
+	$("#createPolygone").on("click",function(){
+			
+			
+			 var coords_string = $("#coords").val();
+			
+			 
+			  var tab1=coords_string.split(" ");
+			  
+			  var last_indice=tab1.length-1 ;
+			  
+			  //~ if(tab1[0]!=tab1[last_indice]) alert("il y a un probleme") ;
+			  
+			  var coordsList ='[[' ;
+					 
+					 for(var i=0;i< (tab1.length-1) ;i++){
+						  
+						  point = tab1[i] ;
+						  
+						  latlng=point.split(",") ;
+						  
+						  coordsList+="[" + latlng[0]+","+latlng[1]+"]," ;
+						  
+						 }
+						 
+			
+				coordsList+="[" + tab1[0]+","+tab1[1]+"]" ;
+						 					
+						coordsList+=']]' ;
+					
+					 var coords= JSON.parse(coordsList) ;
+			 
+			           console.log(coords) ;
+			   
+			   var id = Math.random().toString(36).substr(2, 9);
+			   var puissance=$("#create_polygon_modal").find(".puissance").val();
+               var proba=$("#create_polygon_modal").find(".proba").val();
+               var dde=$("#create_polygon_modal").find(".dde").val();
+               
+               console.log(puissance+"--"+proba+"--"+dde) ;
+               
+       var feature= {
+					"type": "Feature","properties": {"id":id, "puissance":puissance ,"proba":proba,"dde":dde},
+					"geometry": {"type": "Polygon","coordinates":coords}
+					}
+			 
+	  var  zones_impact ;
+			 
+      $.getJSON("data/zones_impact_prev.json", function(data){
+		  zones_impact=data ;
+		
+		zones_impact.features.push(feature) ;
+      
+		console.log(zones_impact) ;
+ 
+		$.ajax({ 
+             url :"actions/zones_impact_prev.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(zones_impact),
+			  
+			 success: function(data)
+			 {
+               alert(data) ;
+			   
+			  },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+         }); //end ajax 
+			     });
+			
+	}) ; // end create polygon 
+	
+ //~ -------------------------- save polygon  ------------------------------
+ 
+	$("#save_polygon").on("click",function(){
+		
+			var multipolygon= map.editTools.featuresLayer;                         
+                         
+                         var geoj=  map.editTools.featuresLayer.toGeoJSON() ;
+                         
+                         var coords = geoj.features[0].geometry.coordinates;
+                         var polygon = coords[0] ;
+                         
+                         var coordsList = '[[' ;
+                         
+                         for(var i=0;i< (polygon.length-1) ;i++){
+							  coordsList+="[" + polygon[i][0]+","+polygon[i][1]+"]," ;
+							 }
+							 
+						var last_indice=polygon.length-1 ;
+						    coordsList+="[" + polygon[last_indice][0]+","+polygon[last_indice][1]+"]" ;
+							coordsList+= ']]' ;
+                        
+                        var coords= JSON.parse(coordsList) ;
+               //~  create uniq id			 
+			   var id = Math.random().toString(36).substr(2, 9);
+               var puissance=$("#save_polygon_modal").find(".puissance").val();
+               var proba=$("#save_polygon_modal").find(".proba").val();
+               var dde=$("#save_polygon_modal").find(".dde").val();
+               
+               console.log(puissance+"--"+proba+"--"+dde) ;
+               
+       var feature= {
+					"type": "Feature","properties": {"id":id,"puissance":puissance ,"proba":proba,"dde":dde},
+					"geometry": {"type": "Polygon","coordinates":coords}
+					}
+					                         
+      
+			   console.log(zones_impact) ;
+			   zones_impact.features.push(feature) ;
+			  
+			   console.log(zones_impact) ;
+ 
+      $.ajax({ 
+             url :"actions/zones_impact_prev.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(zones_impact),
+			  
+			 success: function(data)
+			 {
+               alert(data) ;
+			   
+			  },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+         }); //end ajax 
+         
+		}) ; 
+	
+
+//~=========================== loads all ZoneS =============================== 
+		
+$.getJSON("data/zones_impact_prev.json", function(data){
+		 
+		
+	geojson1 = L.geoJson(data, {
+	style: style,
+	onEachFeature: function (feature, layer) {
+		
+		
+		 layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: zoomToFeature
+			});
+		
+		
+		  var trash_center=$('<button class="btn btn-danger btn-md"><span id="'+feature.properties.id+'"  class="remove_center glyphicon glyphicon-trash"></span></button>');
+					     
+					  layer.bindPopup(trash_center.get(0)) ;
+                      
+                      //~------------ remove option for center ---- 
+                    trash_center.find(".remove_center").on("click",function(){
+						      						      
+						         remove_zone($(this).attr("id")) ;
+						         
+						}) ;  
+		
+	      //~ layer.bindPopup("<b>"+feature.properties.id+"</b>");
+		}
+   });
+   geojson1.addTo(map);
+			
+			}); // end1
+			
+			$.getJSON("data/zones_impact_reel.json", function(data){
+		 
+		
+	geojson1 = L.geoJson(data, {
+	style: style,
+	onEachFeature: function (feature, layer) {
+		
+		
+		 layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: zoomToFeature
+			});
+		
+		
+		  var trash_center=$('<button class="btn btn-danger btn-md"><span id="'+feature.properties.id+'"  class="remove_center glyphicon glyphicon-trash"></span></button>');
+					     
+					  layer.bindPopup(trash_center.get(0)) ;
+                      
+                      //~------------ remove option for center ---- 
+                    trash_center.find(".remove_center").on("click",function(){
+						      						      
+						         remove_zone($(this).attr("id")) ;
+						         
+						}) ;  
+		
+	      //~ layer.bindPopup("<b>"+feature.properties.id+"</b>");
+		}
+   });
+   geojson1.addTo(map);
+			
+			}) // end1
+		
+		
+		}); // end jquery 
+	
+</script>
+ 
+<script>
+//~=========================== Declaration of previsional zones =============================================================== 
+	
+	 
+$(document).ready(function() { 			
+			var markers = [];
+			
+			var poiIcon = L.Icon.extend({
+		    options: {
+		        iconSize: [22,32],
+		        iconAnchor: [-20,0],
+		        shadowSize: [22,13],
+		        shadowAnchor: [-31,-19],
+		        popupAnchor: [32,-2]
+		             }
+		       });
+
+		   var markerIcon = new poiIcon({iconUrl:'images/marker-icon.png'});
+		
+	
+			$(".zone_center").draggable({
+							helper: 'clone',
+							containment: 'map',
+							start: function(evt, ui) {
+								$('#box').fadeTo('fast', 0.6, function() {});
+							},
+							stop: function(evt, ui) {
+								$('#box').fadeTo('fast', 1.0, function() {});
+								
+								var options = {
+									//~ id: 2,
+									type: ui.helper.attr('type'),
+									icon: eval(ui.helper.attr('type') + 'Icon'),
+									draggable: true
+								};
+								
+							insertCenter( map.containerPointToLatLng([ui.offset.left, ui.offset.top]),options );
+							
+							}
+			      });	
+		loadCenters() ;
+		loadCenters2() ;
+		loadNiveaux();
+		loadNiveaux2();
+	}); //en Jquery 	
+			
+			
+			// INSERT point
+	     function insertCenter(position,options) { 
+			 
+			 //~  create uniq id			 
+			 var center_id = Math.random().toString(36).substr(2, 9);
+			 
+			var center = L.marker(position,options).addTo(map);
+			var center_lat=center.getLatLng().lat;
+			var center_lng=center.getLatLng().lng;
+			
+			
+			var popup= $('<div style="width:450px; margin: auto;">'
+            +'<div class="form-group">'
+			+'  <label for="proba">Coordonnées:</label>'
+			+'  <input  class="form-control puissance" id="center_coordinates"  value='+center_lat+','+center_lng+' >'
+			+'</div>'
+            +'<table id="zones" class="table table-bordered table-striped" style="clear: both">'
+           		 +'<thead>'
+            			+'<th class="hidden" >id</th>'
+            			+'<th class="hidden" >center_id</th>'
+            			+'<th class="hidden" >center</th>'
+            			+'<th >Niveau</th>'
+            			+'<th>Rayon</th>'
+            			+'<th>Itensite</th>'
+            			+'<th>Probabilite</th>'
+            			+'<th width="50"> </th>'
+            	+'</thead>'
+                +'<tbody> '
+                    
+                  +'</tbody>'
+            +'</table>'
+            +'<div style="float: right; margin-top: 10px">'
+             +'<button id="add_niveau" class="btn btn-primary"><span class="glyphicon glyphicon-plus"> </span></button>'
+            +'</div>'
+            +'<div style="float: left; margin-top: 10px">'
+             +'<button id="save_center" class="btn btn-primary"><span class="glyphicon glyphicon-ok"> Enregistrer</span></button>'
+            +'</div>'
+            
+        +'</div>' );
+         
+         
+         
+         
+	     center.bindPopup(popup.get(0),{'maxWidth':'600'}) ;
+	     
+//================================= click on add==========================
+
+	popup.find("#add_niveau").on("click",function () {
+			  
+			  popup.find("#zones tbody") .append(
+						' <tr> '        
+                        +'<td class="hidden id">1</td>'
+                        +'<td class="hidden center_id">1</td>'
+                        +'<td class="hidden center">45,45</td>'
+                        +'<td class="niveau_td" >'
+                        +   '<a href="#" class="niveau" data-type="select" data-pk="1" data-value="1" data-title="Select niveau" class="editable editable-click" style="color: gray;"></a>'
+                        +'</td>'
+                        +'<td class="rayon">'
+                        +	'<a href="#" class="rayon" data-type="text" data-pk="1" data-title="Enter " class="editable editable-click"></a>'
+                        +'</td>' 
+                        +'<td class="intensite">'
+                        +	'<a href="#" class="intensite" data-type="text" data-pk="1" data-title="Enter " class="editable editable-click"></a>'
+                        +'</td>' 
+                        +'<td class="probabilite">'
+                        +	'<a href="#" class="probabilite" data-type="text" data-pk="1" data-title="Enter " class="editable editable-click"></a>'
+                        +'</td>' 
+                        +'<td><button id="add_niveau" class="btn btn-danger remove_niveau"><span class="glyphicon glyphicon-trash"></span></button></td>'                 
+                  +'</tr>'			  
+			       ) ;
+            popup.find('.rayon').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'rayon',
+				   title: ''
+				 });
+				 
+			 popup.find('.intensite').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'intensite',
+				   title: ''
+				 });
+			 popup.find('.probabilite').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'probabilite',
+				   title: ''
+				 });
+				 
+		popup.find('.niveau').editable({
+        //~ prepend: "choisissez",
+        source: [
+            {value: 1, text: ' 1'},
+            {value: 2, text: ' 2'},
+            {value: 3, text: ' 3'},
+            {value: 4, text: ' 4'},
+            {value: 5, text: ' 5'},
+           
+        ],
+        display: function(value, sourceData) {
+             var colors = {"": "gray", 1: "red", 2: "green",3: "blue"},
+                 elem = $.grep(sourceData, function(o){return o.value == value;});
+                 
+             if(elem.length) {    
+                 $(this).text(elem[0].text).css("color", colors[value]); 
+             } else {
+                 $(this).empty(); 
+             }
+        }   
+    });   	
+    
+    
+	 //----------------------------  remove niveau -----------------------------------	
+       
+       popup.find(".remove_niveau").on("click",function () {
+         		   var ligne = $(this).closest('tr'); 
+         		   ligne.css("background-color","#d43f3a");
+				      ligne.fadeOut(300, function(){
+						ligne.remove();
+         	  })
+         })   
+   })  ;  //en click on add_niveau  
+            
+ //======================================click on save_center =================================
+ 
+	popup.find("#save_center").on("click",function () {
+		    
+				var center_coordinates=popup.find("#center_coordinates").val() ;
+						
+            var center_coords= JSON.parse("["+center_coordinates+"]") ;
+			 			   			           
+			var feature= {
+							"id":center_id,
+							"center": center_coords
+				         }
+				         
+		    var niveau_features=[] ;
+            
+			popup.find("#zones tr").each(function(){
+			
+			var niveau=$(this).find(".niveau_td").text();
+		if(niveau!=""){
+					var rayon=$(this).find(".rayon").text();
+					var intensite=$(this).find(".intensite").text();
+					var probabilite=$(this).find(".probabilite").text();
+					
+					 var features={
+									"center_id":center_id,
+									"center_coords":center_coords,
+									"niveau":niveau,
+									"rayon":rayon,
+									"intensite":intensite,
+									"probabilite":probabilite,
+								  }
+					  niveau_features.push(features) ;
+			     } 
+		}) ;
+		
+				         
+			var centers ;	
+			
+         
+	$.getJSON("data/centres.json", function(data){
+			centers = data ;
+			centers.features.push(feature) ;
+	                
+	    $.ajax({ 
+             url :"actions/save_center.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(centers),
+			  
+			 success: function(data)
+			 {
+						//~ alert(data) ;
+						$.getJSON("data/niveaux.json", function(data){
+								var niveaux = data ;
+								
+								
+								console.log(niveaux.features) ;
+								console.log(niveau_features) ;
+								
+	                            niveaux.features = niveaux.features.concat(niveau_features) ;
+	                            
+	                            console.log(niveaux) ;	
+	                            
+								 $.ajax({ 
+									 url :"actions/save_niveaux.php",
+									 cache: false,
+									 type: "POST",
+									 dataType :'text',
+									 contentType:"application/json; charset=utf-8",
+									 data: JSON.stringify(niveaux),
+									 success: function(data)
+									 {
+									   alert(data) ;
+									   
+									  },
+									  error: function (jqXHR, textStatus, errorThrown)
+										{
+											alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+										}
+									  }); //end ajax  
+	               
+					 }); // end getJson niveaux 
+			   
+			   },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+              }); //end ajax 
+	               
+			});
+	
+					
+           
+		 
+		});   //en click on save_center   
+	   		  
+			  //~ center.bindPopup("<input value='centre' /><br/>"+center_latlang.lng+" , "+center_latlang.lat) ;
+			 
+			 //~ center.bindPopup(popup[0],{'maxWidth': '500'}) ;
+
+			center.on('dragend', function(evt){
+				updateCenter(center,center_id);
+			});
+			
+			 popup.find('#zones .editable').editable('toggleDisabled');
+			
+	 } // end insertCenter
+			 
+          function updateCenter(center,center_id) { 
+			  
+						var center_lat=center.getLatLng().lat;
+						var center_lng=center.getLatLng().lng;
+						 
+						 //~ console.log(center_id); 
+						 //~ console.log(center_lat); 
+						 //~ console.log(center_lng); 
+						 
+						 var c = $(center.getPopup().getContent()); 
+						 
+						 
+						 //~ console.log(c); 
+						 
+						 c.find("#center_coordinates").val(center_lat+','+center_lng); 
+						 
+						  console.log(c.find("#center_coordinates").val());    
+						 
+									}
+  function loadCenters(){
+			
+			  $.get("data/centres.json", function(centers){
+				// Add points 
+				for(i=0; i< centers.features.length;i++) {
+		  
+					var ftr = centers.features[i];
+					
+					var center = L.marker([ftr.center[0],ftr.center[1]],{'maxWidth':'50px'});
+							center.addTo(map);
+				    
+				    var trash_center=$('<button class="btn btn-danger btn-md"><span id="'+ftr.id+'"  class="remove_center glyphicon glyphicon-trash"></span></button>');
+					    
+					  center.bindPopup(trash_center.get(0)) ;
+                      
+                      //~------------ remove option for center ---- 
+                    trash_center.find(".remove_center").on("click",function(){
+						      						      
+						         remove_center($(this).attr("id")) ;
+						         
+						}) ;  
+                      
+					center.on('dragend', function(evt){
+						updateCenter(center);
+					});
+			
+				
+				} // end for		
+		
+	 }); // end ajax 
+	  }
+	  function loadCenters2(){
+			
+			  $.get("data/centres_reel.json", function(centers){
+				// Add points 
+				for(i=0; i< centers.features.length;i++) {
+		  
+					var ftr = centers.features[i];
+					
+					var center = L.marker([ftr.center[0],ftr.center[1]],{'maxWidth':'50px'});
+							center.addTo(map);
+				    
+				    var trash_center=$('<button class="btn btn-danger btn-md"><span id="'+ftr.id+'"  class="remove_center glyphicon glyphicon-trash"></span></button>');
+					    
+					  center.bindPopup(trash_center.get(0)) ;
+                      
+                      //~------------ remove option for center ---- 
+                    trash_center.find(".remove_center").on("click",function(){
+						      						      
+						         remove_center($(this).attr("id")) ;
+						         
+						}) ;  
+                      
+					center.on('dragend', function(evt){
+						updateCenter(center);
+					});
+			
+				
+				} // end for		
+		
+	 }); // end ajax 
+	  }
+	  
+	  
+  function loadNiveaux(){
+			
+			  $.get("data/niveaux.json", function(data){
+				// Add points 
+				
+				features =data.features.reverse();
+				for(i=0; i< features.length;i++) {
+		  
+					var circle = features[i];
+				    var  color= get_circle_color(parseInt(circle.niveau)) ;
+				    
+		var circle_properties={"niveau":circle.niveau,"rayon":circle.rayon,"intensite":circle.intensite,"probabilite":circle.probabilite}
+					
+					
+				var ci= L.circle(circle.center_coords,circle.rayon,{
+						fillColor:color,
+						weight: 1,
+						opacity: 1,
+						color: '#000',
+						dashArray: '2',
+						fillOpacity:0.6
+				   });
+				   
+				   ci.addTo(map);
+					   
+			ci.bindPopup(
+				"<div>"
+				+"<br/><span class='mlabel'> Niveau :</span><span class= value>"+circle_properties.niveau+"</span>"
+				+"<br/><span class='mlabel'> Rayon :</span><span class= value>"+circle_properties.rayon+"</span>"
+				+"<br/><span class='mlabel'> Intensité :</span><span class= value>"+circle_properties.intensite+"</span>"
+				+"<br/><span class='mlabel'> D° Probabilité :</span><span class= value>"+circle_properties.probabilite+"</span>"
+				+"</div>",{closeButton: true}
+			 );
+				
+				
+		} // end for		
+		
+	        }); // end ajax 
+	  }
+	  
+	  function loadNiveaux2(){
+			
+			  $.get("data/niveaux_reel.json", function(data){
+				// Add points 
+				
+				features =data.features.reverse();
+				for(i=0; i< features.length;i++) {
+		  
+					var circle = features[i];
+				    var  color= get_circle_color(parseInt(circle.niveau)) ;
+				    
+		var circle_properties={"niveau":circle.niveau,"rayon":circle.rayon,"intensite":circle.intensite,"probabilite":circle.probabilite}
+					
+					
+				var ci= L.circle(circle.center_coords,circle.rayon,{
+						fillColor:color,
+						weight: 1,
+						opacity: 1,
+						color: '#000',
+						dashArray: '2',
+						fillOpacity:0.6
+				   });
+				   
+				   ci.addTo(map);
+					   
+			ci.bindPopup(
+				"<div>"
+				+"<br/><span class='mlabel'> Niveau :</span><span class= value>"+circle_properties.niveau+"</span>"
+				+"<br/><span class='mlabel'> Rayon :</span><span class= value>"+circle_properties.rayon+"</span>"
+				+"<br/><span class='mlabel'> Intensité :</span><span class= value>"+circle_properties.intensite+"</span>"
+				+"<br/><span class='mlabel'> D° Probabilité :</span><span class= value>"+circle_properties.probabilite+"</span>"
+				+"</div>",{closeButton: true}
+			 );
+				
+				
+		} // end for		
+		
+	        }); // end ajax 
+	  }
+	 
+ //~ ------------------------- remove center -----------------------------------
+ function remove_center( id){
+	     
+	     console.log(id)
+	    
+	   
+	   
+	 $.getJSON("data/centres.json", function(data){
+					var centers = data ;
+					var features= centers.features ;
+										
+					console.log(centers.features) ;
+					for(i=0;i<centers.features.length;i++){
+						
+						  if(centers.features[i].id==id){
+							    centers.features.splice(i,1); 
+							  }
+						}
+					
+					 console.log(centers.features) ;
+					
+		$.ajax({ 
+             url :"actions/save_center.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(centers),
+			  
+			 success: function(data)
+			 {
+					  
+					   alert("deleted 1") ;
+						$.getJSON("data/niveaux.json", function(data){
+								var niveaux = data ;
+								
+							for(i=niveaux.features.length-1; i>=0;i--){
+								 
+								  if(niveaux.features[i].center_id==id){
+									  console.log(niveaux.features[i].center_id);									   
+										niveaux.features.splice(i,1);
+									  }
+									  
+						       }
+	                            
+	                            console.log(niveaux) ;	
+	                            
+								 $.ajax({ 
+									 url :"actions/save_niveaux.php",
+									 cache: false,
+									 type: "POST",
+									 dataType :'text',
+									 contentType:"application/json; charset=utf-8",
+									 data: JSON.stringify(niveaux),
+									 success: function(data)
+									 {
+									   alert("deleted 2!") ;
+									   
+									  },
+									  error: function (jqXHR, textStatus, errorThrown)
+										{
+											alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+										}
+									  }); //end ajax  
+	               
+					        }); // end getJson niveaux  					 
+			   
+			   },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+              }); //end ajax  
+	   
+		 }); // end getJson centers 
+		 
+	   } 
+	 
+   //~---------------------- remove zone -------------------------------------- 
+	
+ function remove_zone(id){
+	     
+	     console.log(id)
+	   
+	 $.getJSON("data/zones_impact_prev.json", function(data){
+					var zones = data ;
+					var features= zones.features ;
+										
+					
+					for(i=0;i<zones.features.length;i++){
+						
+						  if(zones.features[i].properties.id==id){
+							    zones.features.splice(i,1); 
+							  }
+						}									
+					
+		$.ajax({ 
+             url :"actions/zones_impact_prev.php",
+             cache: false,
+			 type: "POST",
+			 dataType :'text',
+			 contentType:"application/json; charset=utf-8",
+			 data: JSON.stringify(zones),
+			 			  
+			  success: function(data)
+			  {					 
+			        alert(data) ;
+			   },
+			  error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert(jqXHR.error+"---"+textStatus+"---"+errorThrown);
+				}
+              }); //end ajax  
+	   
+		 }); // end getJson zones 
+		 
+	   } // end delete zone
+
+	 function get_circle_color(niveau) {
+						return niveau == "1" ? '#E30800' :
+						 niveau == "2" ? '#F28900' :
+						 niveau == "3"  ? '#E1F200' :
+						 niveau ==  "4" ? '#91F200' :
+						 niveau == "5" ? 'blue' :
+						 niveau == "6" ? '#ADB' :
+						 niveau == "7" ? '#013' :
+						'blue';
+					}
+	   
+	  
+</script>
+   
+</body>                                                                                                                          
+</html>
+    

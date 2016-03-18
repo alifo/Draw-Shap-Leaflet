@@ -1,0 +1,86 @@
+{
+    "type": "FeatureCollection",
+	"features":     
+		[
+	     {
+			"center": [35.79,-5.88],
+			"rayon": "5000",
+			"niveau": "4",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.79,-5.88],
+			"rayon": "3000",
+			"niveau": "3",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.79,-5.88],
+			"rayon": "1000",
+			"niveau": "2",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.79,-5.88],
+			"rayon": "500",
+			"niveau": "1",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+        
+        
+        
+        
+        
+        {
+			"center": [35.65,-5.65],
+			"rayon": "6000",
+			"niveau": "4",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.65,-5.65],
+			"rayon": "7000",
+			"niveau": "3",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [335.65,-5.65],
+			"rayon": "5000",
+			"niveau": "2",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.65,-5.65],
+			"rayon": "3000",
+			"niveau": "1",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+         
+        {
+			"center": [35.38,-6.00],
+			"rayon": "4000",
+			"niveau": "4",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.38,-6.00],
+			"rayon": "3000",
+			"niveau": "3",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.38,-6.00],
+			"rayon": "2000",
+			"niveau": "2",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        },
+	     {
+			"center": [35.38,-6.00],
+			"rayon": "1000",
+			"niveau": "1",
+			"properties" : {"intensite": "457889","puissance":"132256","dde":"21/06/2006","probabilite":"25 %","rayon":"4"}		
+        }
+        
+ 
+]
+ }

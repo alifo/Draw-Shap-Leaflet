@@ -1,0 +1,40 @@
+{"type":"FeatureCollection",
+"features":[
+		{"center_id":"mdjx93gs1","center_coords":[35.802981, -5.805642],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs1","center_coords":[35.802981, -5.805642],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs1","center_coords":[35.802981, -5.805642],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"mdjx93gs2","center_coords":[35.769461, -4.532636],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs2","center_coords":[35.769461, -4.532636],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs2","center_coords":[35.769461, -4.532636],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"mdjx93gs3","center_coords":[35.503827,-7.507184],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs3","center_coords":[35.503827,-7.507184],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs3","center_coords":[35.503827,-7.507184],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		
+		{"center_id":"kmdf8ghm1","center_coords":[35.084582, -4.026372],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm1","center_coords":[35.084582, -4.026372],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm1","center_coords":[35.084582, -4.026372],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"kmdf8ghm2","center_coords":[34.732760, -4.097131],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm2","center_coords":[34.732760, -4.097131],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm2","center_coords":[34.732760, -4.097131],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"kmdf8ghm3","center_coords":[34.603647, -4.623273],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm3","center_coords":[34.603647, -4.623273],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm3","center_coords":[34.603647, -4.623273],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"kmdf8ghm4","center_coords":[35.563337, -5.401929],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm4","center_coords":[35.563337, -5.401929],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm4","center_coords":[35.563337, -5.401929],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"kmdf8ghm5","center_coords":[35.700627, -5.617536],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm5","center_coords":[35.700627, -5.617536],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm5","center_coords":[35.700627, -5.617536],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+
+		{"center_id":"kmdf8ghm6","center_coords":[35.351360, -6.015103],"niveau":" 1","rayon":"1000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm6","center_coords":[35.351360, -6.015103],"niveau":" 2","rayon":"1500","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"kmdf8ghm6","center_coords":[35.351360, -6.015103],"niveau":" 3","rayon":"2000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"}
+	]
+}

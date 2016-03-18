@@ -1,0 +1,7 @@
+{"type":"FeatureCollection",
+"features":[
+		{"center_id":"mdjx93gs1","center_coords":[35.210912, -3.966202],"niveau":" 1","rayon":"14000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs1","center_coords":[35.210912, -3.966202],"niveau":" 2","rayon":"15000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"},
+		{"center_id":"mdjx93gs1","center_coords":[35.210912, -3.966202],"niveau":" 3","rayon":"17000","intensite":"EmptyEmpty","probabilite":"EmptyEmpty"}
+	]
+}

@@ -1,0 +1,68 @@
+{
+	"features":[
+					{
+						"geometry":{"type":"Point","coordinates":[-5.902092,35.736444]},
+						"properties":{  "nature":"ecole",
+										 "utilisation":"Abri ",
+										 "capacite":"452 personnes",
+										 "ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+									   }
+					},
+					
+					{
+						"geometry":{"type":"Point","coordinates":[-6.008856,35.486306]},
+						"properties":{
+							"nature":"ecole",
+							 "nature":"ecole",
+										 "utilisation":"Abri ",
+										 "capacite":"452 personnes",
+										 "ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+							}
+					},
+					{
+						"geometry":{"type":"Point","coordinates":[-5.90,35.76]},
+						"properties":{
+										"nature":"hopital",
+										"utilisation":"Abri ",
+										"capacite":"452 personnes","type": "FeatureCollection",
+										"ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+									   }
+					},
+					{
+						"geometry":{"type":"Point","coordinates":[-5.97,35.40]},
+						"properties":{
+							"nature":"hopital",
+							"utilisation":"Abri ",
+							"capacite":"452 personnes",
+							"ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+							}
+					},
+					{
+						"geometry":{"type":"Point","coordinates":[-5.74,35.60]},
+						"properties":{
+									  "nature":"ecole",
+									  "utilisation":"Abri ",
+									  "capacite":"452 personnes",
+									  "ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+							}
+					},
+					{
+						"geometry":{"type":"Point","coordinates":[-5.79,35.68]},
+						"properties":{
+								"nature":"maison",
+								"utilisation":"maison ",
+								"capacite":"452 personnes",
+								"ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+								}
+					},
+					{
+						"geometry":{"type":"Point","coordinates":[-5.73,35.68]},
+						"properties":{
+									 "nature":"ecole",
+									 "utilisation":"Abri ",
+									 "capacite":"452 personnes",
+									 "ressources":{"energie":" Disponible","medicament":"non disponible","autres":"disponible"}
+									 }
+					}
+			]
+			}

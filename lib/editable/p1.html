@@ -1,0 +1,128 @@
+<html>
+<head>
+   <title> P1 </title>   
+   <meta charset="utf-8" />
+   
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+   
+		<!--  =======================  -->
+	<script src="js/jquery.min.js"></script>
+    <script src="js/jquery.mockjax.js"></script>
+
+	    
+		<link href="bootstrap/bootstrap.css" rel="stylesheet">
+		<link href="bootstrap/bootstrap-responsive.css" rel="stylesheet">  
+		<script src="bootstrap/bootstrap.js"></script>
+        			
+		 
+         <link href="editable/bootstrap-editable.css" rel="stylesheet">
+         <script src="editable/bootstrap-editable.js"></script>
+
+
+   <style>
+		#box {			
+				display:block;
+		   }
+		   #zones .input-sm{
+							width:80px !important ; 
+							font-weight:bold ;
+							
+							}		
+  </style>
+   
+ 
+</head>
+<body>
+  
+   <div id="pl_editable">
+				<div class="form-group">
+					<label for="pwd">Coordonnées:</label>
+					<input type="text" class="form-control" id="pl_coordinates" value=point_lng,point_lat>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Nature:</label>
+					<a href="#" class="nature" data-type="select" data-pk="1" data-value="options.type"  class="editable editable-click" > </a>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Utilisation:</label>
+					<a href="#" class="utilisation" data-type="select" data-pk="1" data-value=""  class="editable editable-click" > </a>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Etat:</label>
+					<a href="#" class="etat" data-type="select" data-pk="1" data-value=""  class="editable editable-click" > </a>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Capacite d\accueil:</label>
+					<a href="#" class="capacite" data-type="text" data-pk="1" class="editable editable-click" > </a>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Accebilité:</label>
+					<a href="#" class="accessibilite" data-type="select" data-pk="1" data-value=""  class="editable editable-click" > </a>
+				</div>
+				<span class=popup_title >Ressources</span><br/>
+				<div class="form-group">
+					<label for="pwd">Energie:</label>
+					<a href="#" class="energie" data-type="text" data-pk="1" class="editable editable-click" > </a>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Eau:</label>
+					<a href="#" class="eau" data-type="text" data-pk="1" class="editable editable-click" > </a>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Nourriture:</label>
+					<a href="#" class="nourriture" data-type="text" data-pk="1" class="editable editable-click" > </a>
+				</div>
+                     <button id="save_pl" class="btn btn-primary" style="margin-left:170px;"><span class="glyphicon glyphicon-ok"> Enregistrer</span></button>
+            </div>
+
+<script src="editable/editable_config.js"></script> 
+<script>
+	// ===================	Drag & Drop
+$(function() { 
+	  
+				
+			$.fn.editable.defaults.mode =  'inline';
+            
+           
+            //~ ------------ enable edition on fields -------------------------
+            $('.capacite').editable({
+				   url: '/post',
+				   type: 'text',
+				   pk: 1,
+				   name: 'acceuil',
+				   title: ''
+				 });
+				 
+				
+				 
+			$('.utilisation').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "Abri", text: 'Abri'},
+					{value: "Entrepot", text: 'Entrepot'},
+					{value: "Stockage", text: 'Stockage'},
+					{value: "Autre", text: 'Autre'},
+				   ] 
+				  });  // end .utilisation	
+				   
+			$('.accessibilite').editable({
+				prepend: "choisissez",
+				source: [
+					{value: "Normale", text: ' Normale'},
+					{value: "Reduite", text: 'Reduite'},
+					{value: "T. Reduite", text: 'T. Reduite'},
+					{value: "Dangereuse", text: ' Dangereuse'},
+					{value: "T. Dangereuse", text: 'T. Dangereuse'},
+					{value: "Inaccessible", text: 'Inaccessible'}
+				]  
+				  });  // end .accessibilite	
+				  
+				
+   });
+	 
+</script>
+   
+</body>                                                                                                                          
+</html>
+    

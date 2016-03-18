@@ -1,0 +1,135 @@
+#map { height:100% ; width:100% }
+   
+   .info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background-color: #FFF;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    }
+    
+	.info h4 {
+		margin: 0 0 5px;
+		color: blue;
+	}
+   
+   
+   .legend {
+    line-height: 18px;
+    color: #555;
+    }
+    
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+   }
+   
+   #box {
+			position: absolute; 
+			top: 12px; 
+			left: 50px; 
+			background-color: white; 
+			padding: 5px;
+			z-index: 1000;
+		}
+		
+	#box2 {
+		position: absolute; 
+		top: 12px; 
+		left: 450px; 
+		background-color: white; 
+		padding: 5px;
+		z-index: 1000;
+	}
+	#box3 {
+		position: absolute; 
+		top: 12px; 
+		left: 950px; 
+		background-color: white; 
+		padding: 5px;
+		z-index: 1000;
+		
+	}
+		
+		#box img {
+			margin-left: 20px;
+			margin-right: 5px;
+			width:40px;height:30;
+			cursor: pointer;
+		}
+		
+		#box2 img {
+			margin-left: 20px;
+			margin-right: 5px;
+			width:40px;height:30;
+			cursor: pointer;
+		}
+		#box3 img {
+			margin-left: 20px;
+			margin-right: 5px;
+			width:40px;height:30;
+			cursor: pointer;
+		}
+
+
+		
+   #circle_center {
+			position: absolute; 
+			top: 250px; 
+			left: 10px; 
+			background-color: white; 
+			padding: 5px;
+			z-index: 1001;
+			display:block;
+		}
+		
+   #circle_center img {
+/*
+			margin-left: 20px;
+			margin-right: 5px;
+			width:30px;height:30;
+*/
+			cursor: pointer;
+		}	
+		
+		
+		
+		.mlabel { font-weight:700 ;
+				 line-height:1.2;
+				 font-size: 15px;
+				 
+				 }
+		.popup_title{ color:blue; font-weight:bold ; font-size: 20px;}
+		
+		.value{color:#F27900 ; padding-left:10px}
+		
+		
+.modal-heade {
+		padding:9px 15px;
+		border-bottom:1px solid #eee;
+		background-color: #22C1F2;
+		-webkit-border-top-left-radius: 5px;
+		-webkit-border-top-right-radius: 5px;
+		-moz-border-radius-topleft: 5px;
+		-moz-border-radius-topright: 5px;
+		 border-top-left-radius: 5px;
+		 border-top-right-radius: 5px;
+		 color:#FFF;
+		 font-family:URW Chancery L; font-size:13px;font-weight:bold ;
+		 
+		 
+      }
+   
+.fa-lg {
+	font-size: 1.933333333333333em;
+	padding-top: 3px;
+	line-height: none; 
+	vertical-align: none;
+   }
+
+#zones { font:agency fb; font-size:12px ; margin-top:10px;}
+
+.config_icon{ margin-top:20px; }
